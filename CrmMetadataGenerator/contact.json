@@ -1,0 +1,18 @@
+{ "Name": "gen_contact", "NamingPrefix": "altai", "PrimaryAttribute": "firstname", "Attributes": [
+	{ "Name": "honorific", "Type": "Picklist", "Value": 1 },
+	{ "Name": "firstname", "Type": "String", "Value": "Dan" },
+	{ "Name": "lastname", "Type": "String", "Value": "Newcome" },
+	{ "Name": "middlename", "Type": "String", "Value": "J" },
+	{ "Name": "suffix", "Type": "String", "Value": "Jr" },
+	{ "Name": "spousesname", "Type": "String", "Value": "Susan" },
+	{ "Name": "address1_line1", "Type": "String", "Value": "123 Elm St." },
+	{ "Name": "address1_line2", "Type": "String", "Value": "Apartment 3" },
+	{ "Name": "address1_city", "Type": "String", "Value": "Mountain View" },
+	{ "Name": "address1_stateorprovince", "Type": "String", "Value": "CA" },
+	{ "Name": "address1_postalcode", "Type": "String", "Value": "94041" },
+	{ "Name": "address1_telephone1", "Type": "String", "Value": "123-456-7890" },
+	{ "Name": "address1_telephone2", "Type": "String", "Value": "123-456-7891" },
+	{ "Name": "emailaddress1", "Type": "String", "Value": "dan@dan.com" },
+	{ "Name": "birthdate", "Type": "DateTime", "Value": "1997-07-16T19:20:30+01:00" },
+	{ "Name": "altai_memberid", "Type": "String", "Value": "M1234" }
+] }
