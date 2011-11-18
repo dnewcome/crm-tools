@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,19 +43,30 @@ namespace CrmDataGenerator
 		static void Main( string[] args ) {
 			if( args.Length < 2 ) {
 				Console.WriteLine( "CRM data generator" );
-				Console.WriteLine( "usage: crmgen bizorg file" );
+				Console.WriteLine( "usage: crmgen bizorg file [configfile]" );
 				System.Environment.Exit( 1 );
 			}
+
 
 			string currentDir = System.Environment.CurrentDirectory;
 			string json = new StreamReader( new FileStream( currentDir + "\\" + args[1], FileMode.Open, FileAccess.Read ) ).ReadToEnd();
 
+			MSCrmConfigurationSection config = null;
+			if( args.Length == 3 ) {
+				config = GetConfig( args[ 2 ] );
+			}
 
 			try {
 				Entity[] ent = Serializer.DeSerialize( json );
 				foreach( Entity item in ent ) {
 					IEntityWrap wrap = WrapFromSpec( item );
-					DynamicEntityHelperWrap.CreateDynamicEntity( "testorg", wrap );
+					if( config != null ) {
+						DynamicEntityHelperWrap.CreateDynamicEntity( args[ 0 ], config, wrap );
+					}
+					else {
+						DynamicEntityHelperWrap.CreateDynamicEntity( args[ 0 ], wrap );
+					}
+					
 				}
 				
 			}
@@ -62,5 +74,13 @@ namespace CrmDataGenerator
 				Console.WriteLine( ex.Message );
 			}
 		}
-	}
-}
+
+		static Altai.MSCrm.MSCrmConfigurationSection GetConfig( string in_filename ) {
+			ConfigurationFileMap fileMap = new ConfigurationFileMap( in_filename );
+			Configuration configuration = System.Configuration.ConfigurationManager.OpenMappedMachineConfiguration( fileMap );
+			Altai.MSCrm.MSCrmConfigurationSection config = ( Altai.MSCrm.MSCrmConfigurationSection )configuration.GetSection( "Altai.MSCrm" );
+			return config;
+		}
+
+	} // class
+} // namespace
