@@ -83,7 +83,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\altai-dev\EntityWrap\EntityWrap.csproj">
+    <ProjectReference Include="..\..\..\altai-dev\EntityWrap\EntityWrap.csproj">
       <Project>{B7B6CC02-8C13-42B0-BF57-8558C1B01994}</Project>
       <Name>EntityWrap</Name>
     </ProjectReference>
