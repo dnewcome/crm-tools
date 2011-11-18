@@ -56,16 +56,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
-    <Compile Include="Model.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="contact.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CrmToolsCore\CrmToolsCore.csproj">
+      <Project>{97D25287-ACB7-4426-9585-7B6B50531AEC}</Project>
+      <Name>CrmToolsCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
