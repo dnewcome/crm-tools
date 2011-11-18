@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmMetadataGenerator", "Crm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmJsonSerializer", "CrmJsonSerializer\ClassLibrary1\CrmJsonSerializer.csproj", "{1A888BF7-3271-413F-9139-F660BAA8AABF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityWrap", "..\..\altai-dev\EntityWrap\EntityWrap.csproj", "{B7B6CC02-8C13-42B0-BF57-8558C1B01994}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,16 @@ Global
 		{1A888BF7-3271-413F-9139-F660BAA8AABF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1A888BF7-3271-413F-9139-F660BAA8AABF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1A888BF7-3271-413F-9139-F660BAA8AABF}.Release|x86.ActiveCfg = Release|Any CPU
+		{B7B6CC02-8C13-42B0-BF57-8558C1B01994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7B6CC02-8C13-42B0-BF57-8558C1B01994}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7B6CC02-8C13-42B0-BF57-8558C1B01994}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B7B6CC02-8C13-42B0-BF57-8558C1B01994}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B7B6CC02-8C13-42B0-BF57-8558C1B01994}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B7B6CC02-8C13-42B0-BF57-8558C1B01994}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7B6CC02-8C13-42B0-BF57-8558C1B01994}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7B6CC02-8C13-42B0-BF57-8558C1B01994}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B7B6CC02-8C13-42B0-BF57-8558C1B01994}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B7B6CC02-8C13-42B0-BF57-8558C1B01994}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
