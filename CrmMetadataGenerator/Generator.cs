@@ -23,6 +23,25 @@ namespace CrmMetadataGenerator
 		}
 
 		/**
+		 * TODO: special note - we have to publish entity after we add these values before
+		 * they can be used.
+		 */
+		public static void CreatePickListValues( EntityMetadataSpec spec, MetadataService service ) { 
+			foreach( AttributeMetadataSpec attribute in spec.Attributes ) {
+				if( attribute.Type == "Picklist" ) {
+					foreach( PicklistMetadata picklist in attribute.Values ) {
+						try {
+							Console.WriteLine( "Creating Picklist Item " + attribute.Name + " " + picklist.Name );
+							CreatePicklistItem( service, spec.Name, Generator.ApplyPrefix( spec.NamingPrefix, attribute.Name ), picklist.Name, picklist.Value );
+						}
+						catch( System.Web.Services.Protocols.SoapException e ) {
+							Console.WriteLine( e.Detail.InnerText );
+						}
+					}
+				}
+			}
+		}
+		/**
 		 * Create a picklist item in an existing picklist - code adapted from 4.0 SDK documentation
 		 * mk:@MSITStore:C:\Users\Administrator\Desktop\altai-dev\crm4sdk\crmsdk4.chm::/htm/v4d0_sp5420r_insertoptionvaluemessage.htm
 		 */
@@ -51,6 +70,83 @@ namespace CrmMetadataGenerator
 
 			// Send the message.
 			InsertOptionValueResponse insertResponse = ( InsertOptionValueResponse )svc.Execute( insertRequest );
+		}
+
+		public static void CreateLookups( EntityMetadataSpec spec, MetadataService service ) { 
+			foreach( AttributeMetadataSpec aspec in spec.Attributes ) { 
+				if( aspec.Type == "PartyList" || aspec.Type == "Lookup" ) {
+					
+					LookupAttributeMetadata lameta = CreateAttributeMetadata<LookupAttributeMetadata>( spec, aspec );
+						
+					// lameta.SchemaName = "new_foo_bar";
+
+					lameta.AttributeType = new CrmAttributeType();
+					if( aspec.Type == "PartyList" ) {
+						lameta.AttributeType.Value = AttributeType.PartyList;
+					}
+					else {
+						lameta.AttributeType.Value = AttributeType.Lookup;
+					}
+						
+					// display name is set by CreateAttributeMetadata
+					lameta.DisplayName = CreateCrmLabel( "Lookup" );
+						
+					lameta.RequiredLevel = new CrmAttributeRequiredLevel();
+					lameta.RequiredLevel.Value = AttributeRequiredLevel.None;
+					// has to have a description. otherwise "Generic SQL error
+					lameta.Description = CreateCrmLabel( "default description" );
+						
+
+
+
+					OneToManyMetadata lmeta = new OneToManyMetadata();
+						
+						
+					// The account entity will be the 'one' in this one-to-many relationship
+					lmeta.ReferencedEntity = aspec.ReferencedEntity;
+
+					// The campaign entity will be the 'many' in this one-to-many relationship
+					lmeta.ReferencingEntity = spec.Name;
+
+					// Set the metadata properties
+					lmeta.SchemaName = ApplyPrefix( spec.NamingPrefix, aspec.ReferencedEntity + "_" + spec.Name );
+						
+
+					CreateOneToManyRequest req = new CreateOneToManyRequest();
+					OneToManyMetadata oneToManyRelationship = lmeta;
+					req.OneToManyRelationship = lmeta;
+					req.Lookup = lameta;
+
+
+					// Set the metadata properties
+					oneToManyRelationship.AssociatedMenuBehavior = new CrmAssociatedMenuBehavior();
+					oneToManyRelationship.AssociatedMenuBehavior.Value = AssociatedMenuBehavior.UseLabel;
+					oneToManyRelationship.AssociatedMenuGroup = new CrmAssociatedMenuGroup();
+					oneToManyRelationship.AssociatedMenuGroup.Value = AssociatedMenuGroup.Details;
+					oneToManyRelationship.AssociatedMenuLabel = CreateCrmLabel( aspec.Name );
+					oneToManyRelationship.AssociatedMenuOrder = new CrmNumber();
+					oneToManyRelationship.AssociatedMenuOrder.Value = 10000;
+
+					// Make the relationship behaviour 'parental' by setting all cascade properties to 'Cascade'
+					/*
+					oneToManyRelationship.CascadeAssign = new CrmCascadeType();
+					oneToManyRelationship.CascadeAssign.Value = CascadeType.Cascade;
+					oneToManyRelationship.CascadeDelete = new CrmCascadeType();
+					oneToManyRelationship.CascadeDelete.Value = CascadeType.Cascade;
+					oneToManyRelationship.CascadeReparent = new CrmCascadeType();
+					oneToManyRelationship.CascadeReparent.Value = CascadeType.Cascade;
+					oneToManyRelationship.CascadeShare = new CrmCascadeType();
+					oneToManyRelationship.CascadeShare.Value = CascadeType.Cascade;
+					oneToManyRelationship.CascadeUnshare = new CrmCascadeType();
+					oneToManyRelationship.CascadeUnshare.Value = CascadeType.Cascade;
+					*/
+
+					ExecuteOneToManyRequest( req, service );
+					// TODO: do we add this attribute as well?
+				}			
+					
+			}
+		
 		}
 
 		/**
@@ -102,34 +198,8 @@ namespace CrmMetadataGenerator
 						break;
 					case "PartyList":
 						// TODO: no real idea about how this should work
-						LookupAttributeMetadata partymeta = CreateAttributeMetadata<LookupAttributeMetadata>( spec, aspec );
-						attributes.Add( partymeta );
 						break;
 
-					case "Lookup":
-						
-					// doing lookups requires a different service call.. we need to redesign to support this
-						/*
-						LookupAttributeMetadata lameta = CreateAttributeMetadata<LookupAttributeMetadata>( spec, aspec );
-
-						OneToManyMetadata lmeta = new OneToManyMetadata();
-						
-						
-						// The account entity will be the 'one' in this one-to-many relationship
-						lmeta.ReferencedEntity = spec.Name;
-
-						// The campaign entity will be the 'many' in this one-to-many relationship
-						lmeta.ReferencingEntity = aspec.ReferencedEntity;
-
-						// Set the metadata properties
-						lmeta.SchemaName = aspec.Name;
-
-						CreateOneToManyRequest req = new CreateOneToManyRequest();
-						req.OneToManyRelationship = lmeta;
-						req.Lookup = lameta;
-						relationships.Add( req );
-						 */
-						break;
 					case "Boolean":
 						BooleanAttributeMetadata bmeta = CreateAttributeMetadata<BooleanAttributeMetadata>( spec, aspec );
 
@@ -152,6 +222,9 @@ namespace CrmMetadataGenerator
 					case "Money":
 						MoneyAttributeMetadata mmeta = CreateAttributeMetadata<MoneyAttributeMetadata>( spec, aspec );
 						attributes.Add( mmeta );
+						break;
+					case "Lookup":
+						// ignore lookups here, we create them in another step
 						break;
 					default:
 						throw new NotImplementedException( "Creating entity metadata of type " + aspec.Type + " not impemented" );
@@ -191,6 +264,42 @@ namespace CrmMetadataGenerator
 		}
 
 		/**
+		 * Call CRM to create entity attributes
+		 */
+		public static void ExecuteAttributeMetadataRequest( EntityMetadata meta, MetadataService in_service ) {
+			// note that attributes must be added one at a time, can't be added
+			// along with creation of entity.
+			foreach( AttributeMetadata amd in meta.Attributes ) {
+				if( amd.SchemaName == meta.PrimaryField ) {
+					continue;
+				}
+				CreateAttributeRequest ureq = new CreateAttributeRequest();
+				ureq.Attribute = amd;
+				ureq.EntityName = meta.SchemaName;
+				try {
+					Console.WriteLine( "Creating Attribute " + amd.LogicalName );
+					in_service.Execute( ureq );
+				}
+				catch( System.Web.Services.Protocols.SoapException e ) {
+					Console.WriteLine( e.Detail.InnerText );
+				}
+			}
+		}
+
+		/**
+		* Call CRM to create entity attributes
+		*/
+		public static void ExecuteOneToManyRequest( CreateOneToManyRequest req, MetadataService in_service ) {
+			try {
+				Console.WriteLine( "Creating Reference " + req.OneToManyRelationship.SchemaName );
+				in_service.Execute( req );
+			}
+			catch( System.Web.Services.Protocols.SoapException e ) {
+				Console.WriteLine( e.Detail.InnerText );
+			}
+		}
+
+		/**
 		 * create a new entity from the given metadata in CRM 
 		 */
 		public static void ExecuteMetadataRequest( EntityMetadata meta, MetadataService in_service ) {
@@ -205,23 +314,11 @@ namespace CrmMetadataGenerator
 
 			req.Entity = meta;
 			try {
+				Console.WriteLine( "Creating Entity " + meta.SchemaName );
 				in_service.Execute( req );
 			}
 			catch( System.Web.Services.Protocols.SoapException e ) {
 				Console.WriteLine( e.Detail.InnerText );
-			}
-			// note that attributes must be added one at a time, can't be added
-			// along with creation of entity.
-			foreach( AttributeMetadata amd in meta.Attributes ) {
-				CreateAttributeRequest ureq = new CreateAttributeRequest ();
-				ureq.Attribute = amd;
-				ureq.EntityName = meta.SchemaName;
-				try {
-					in_service.Execute( ureq );
-				}
-				catch( System.Web.Services.Protocols.SoapException e ) {
-					Console.WriteLine( e.Detail.InnerText );
-				}
 			}
 		}
 
