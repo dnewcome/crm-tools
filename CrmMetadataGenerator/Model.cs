@@ -32,5 +32,20 @@ namespace CrmMetadataGenerator
 		[DataMember]
 		// used only for lookup attributes.. todo: should make this cleaner
 		public string ReferencedEntity { get; set; }
+
+		[DataMember]
+		// used only for lookup attributes.. todo: should make this cleaner
+		public List<PicklistMetadata> Values { get; set; }
+
 	}
+
+	[DataContract]
+	public class PicklistMetadata
+	{
+		[DataMember]
+		public string Name { get; set; }
+		[DataMember]
+		public int Value { get; set; }
+	}
+
 }
