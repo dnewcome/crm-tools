@@ -4,15 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+// effectively exclude this file if we are building for CRM4
+#if ! CRM4
+
+// attempt at mapping things so we can use the same code for crm 4 and 2011
 #if CRM4
 using Microsoft.Crm.SdkTypeProxy.Metadata;
 using Microsoft.Crm.Sdk.Metadata;
-using MDService = Microsoft.Crm.Sdk.Metadata.MetadataService;
-using LocalizedLabel = LocLabel;
-using Label = CrmLabel;
-using AttributeTypeCode = CrmAttributeType;
-using OneToManyMetadata = OneToManyRelationshipMetadata;
-using CrmAssociatedMenuBehavior = AssociatedMenuBehavior;
+using MDService = Microsoft.Crm.SdkTypeProxy.Metadata.MetadataService;
+using LocalizedLabel = Microsoft.Crm.Sdk.LocLabel;
+using Label = Microsoft.Crm.Sdk.CrmLabel;
+using AttributeTypeCode = Microsoft.Crm.Sdk.Metadata.CrmAttributeType;
+using OneToManyMetadata = Microsoft.Crm.Sdk.Metadata.OneToManyMetadata;
+using CrmAssociatedMenuBehavior = Microsoft.Crm.Sdk.Metadata.AssociatedMenuBehavior;
 #else
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -20,6 +24,8 @@ using Microsoft.Xrm.Sdk.Metadata;
 using MDService = Microsoft.Xrm.Sdk.IOrganizationService;
 using CrmNumber = System.Int32;
 #endif
+
+
 
 namespace CrmMetadataGenerator
 {
@@ -313,3 +319,6 @@ namespace CrmMetadataGenerator
 		}
 	}
 }
+
+// the matching if directive excludes the file if we build for CRM4
+#endif

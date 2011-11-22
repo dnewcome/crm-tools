@@ -10,6 +10,7 @@ using Microsoft.Crm.Sdk.Metadata;
 using System.Configuration;
 
 #if CRM4
+using Gen = CrmMetadataGenerator.Generator;
 #else
 using Gen = CrmMetadataGenerator.Generator2011;
 using MSCrmConfigurationSection = Altai.MSCrm.MSCrm5ConfigurationSection;
