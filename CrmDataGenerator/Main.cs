@@ -5,7 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Altai.MSCrm;
-using Microsoft.Crm.Sdk;
+// using Microsoft.Crm.Sdk;
+
+#if CRM4
+using AltaiConfig = Altai.MSCrm.MSCrmConfigurationSection;
+#else
+using AltaiConfig = Altai.MSCrm.MSCrm5ConfigurationSection;
+#endif
 
 namespace CrmDataGenerator
 {
@@ -51,7 +57,7 @@ namespace CrmDataGenerator
 			string currentDir = System.Environment.CurrentDirectory;
 			string json = new StreamReader( new FileStream( currentDir + "\\" + args[1], FileMode.Open, FileAccess.Read ) ).ReadToEnd();
 
-			MSCrmConfigurationSection config = null;
+			AltaiConfig config = null;
 			if( args.Length == 3 ) {
 				config = GetConfig( args[ 2 ] );
 			}
@@ -75,10 +81,10 @@ namespace CrmDataGenerator
 			}
 		}
 
-		static Altai.MSCrm.MSCrmConfigurationSection GetConfig( string in_filename ) {
+		static AltaiConfig GetConfig( string in_filename ) {
 			ConfigurationFileMap fileMap = new ConfigurationFileMap( in_filename );
 			Configuration configuration = System.Configuration.ConfigurationManager.OpenMappedMachineConfiguration( fileMap );
-			Altai.MSCrm.MSCrmConfigurationSection config = ( Altai.MSCrm.MSCrmConfigurationSection )configuration.GetSection( "Altai.MSCrm" );
+			AltaiConfig config = ( AltaiConfig )configuration.GetSection( "Altai.MSCrm" );
 			return config;
 		}
 
