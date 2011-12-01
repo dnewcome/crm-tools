@@ -34,8 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Altai.Commons.Crm2011">
-      <HintPath>lib\Altai.Commons.Crm2011.dll</HintPath>
+    <Reference Include="Altai.Commons.Crm2011, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d2532a25897b57ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Altai.Commons.Crm2011\release\1.0.2\4.0\Debug\Altai.Commons.Crm2011.dll</HintPath>
     </Reference>
     <Reference Include="Altai.Commons.Crm4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
