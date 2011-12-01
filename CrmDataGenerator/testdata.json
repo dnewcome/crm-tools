@@ -15,6 +15,6 @@
 	{ "Name": "address1_telephone2", "Type": "String", "Value": "123-456-7891" },
 	{ "Name": "emailaddress1", "Type": "String", "Value": "dan@dan.com" },
 	{ "Name": "birthdate", "Type": "DateTime", "Value": "1997-07-16T19:20:30+01:00" },
-	{ "Name": "altai_memberid", "Type": "String", "Value": "M1234" }
+	{ "Name": "memberid", "Type": "String", "Value": "M1234" }
 ] },
 ]
